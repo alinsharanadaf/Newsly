@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div style="max-width: 450px; margin: 60px auto; padding: 35px; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1);">
+
+    <h2 style="text-align: center; margin-bottom: 10px;">Welcome Back 👋</h2>
+
+    <p style="text-align: center; color: #777; margin-bottom: 30px;">
+        Login to your Newsly account
+    </p>
+
+    {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <input type="text" name="username" required
+               style="width: 100%; padding: 12px; margin: 8px 0 20px; border: 1px solid #ddd; border-radius: 8px;">
+
+        <label>Password</label>
+        <input type="password" name="password" required
+               style="width: 100%; padding: 12px; margin: 8px 0 25px; border: 1px solid #ddd; border-radius: 8px;">
+
+        <button type="submit"
+                style="width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer;">
+            Login
+        </button>
+    </form>
+
+    <p style="text-align: center; margin-top: 25px;">
+        Don't have an account?
+        <a href="{% url 'register' %}">Create Account</a>
+    </p>
+
+</div>
+
+{% endblock %}

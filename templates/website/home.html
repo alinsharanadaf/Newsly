@@ -1,0 +1,705 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Newsly | Personalized News & Opinion{% endblock %}
+
+{% block content %}
+
+<style>
+    .newsly-home {
+        background: #f8f5ee;
+        color: #202638;
+    }
+
+    .hero-wrap {
+        padding: 70px 0 45px;
+    }
+
+    .hero-card {
+        position: relative;
+        overflow: hidden;
+        background: #17233c;
+        border-radius: 28px;
+        padding: 65px;
+        color: white;
+        box-shadow: 0 20px 55px rgba(23,35,60,.16);
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+        content: "";
+        position: absolute;
+        border: 1px solid rgba(199,164,93,.25);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .hero-card::before {
+        width: 280px;
+        height: 280px;
+        right: -90px;
+        top: -100px;
+    }
+
+    .hero-card::after {
+        width: 180px;
+        height: 180px;
+        right: 90px;
+        bottom: -120px;
+    }
+
+    .eyebrow {
+        color: #c7a45d;
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    .hero-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2.6rem, 6vw, 5rem);
+        line-height: 1.02;
+        max-width: 760px;
+        margin-bottom: 22px;
+    }
+
+    .hero-text {
+        color: #d9deea;
+        max-width: 610px;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .gold-btn {
+        background: #c7a45d;
+        color: #17233c;
+        border: 1px solid #c7a45d;
+        border-radius: 999px;
+        padding: 12px 23px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .25s;
+    }
+
+    .gold-btn:hover {
+        background: white;
+        color: #17233c;
+        transform: translateY(-2px);
+    }
+
+    .outline-btn {
+        color: white;
+        border: 1px solid rgba(255,255,255,.35);
+        border-radius: 999px;
+        padding: 12px 23px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .25s;
+    }
+
+    .outline-btn:hover {
+        background: white;
+        color: #17233c;
+    }
+
+    .section-space {
+        padding: 35px 0;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.1rem;
+        margin: 0;
+        color: #17233c;
+    }
+
+    .section-heading p {
+        color: #737989;
+        margin: 5px 0 0;
+    }
+
+    .section-link {
+        color: #17233c;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .section-link:hover {
+        color: #b28d49;
+    }
+
+    .news-card {
+        height: 100%;
+        overflow: hidden;
+        background: white;
+        border: 1px solid #e8e3d8;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(23,35,60,.05);
+        transition: .3s ease;
+    }
+
+    .news-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 38px rgba(23,35,60,.11);
+    }
+
+    .news-image {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.news-image-placeholder {
+    height: 250px;
+    background: #ece7dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #17233c;
+    font-size: 2rem;
+}
+        background: #ece7dc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #17233c;
+        font-size: 2rem;
+    }
+
+    .news-body {
+        padding: 22px;
+    }
+
+    .category-pill {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 999px;
+        background: #f4ead5;
+        color: #8b6b2d;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .7px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    .news-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.35rem;
+        line-height: 1.25;
+        margin-bottom: 10px;
+    }
+
+    .news-title a {
+        color: #17233c;
+        text-decoration: none;
+    }
+
+    .news-title a:hover {
+        color: #a27c36;
+    }
+
+    .news-description {
+        color: #737989;
+        line-height: 1.7;
+        font-size: .94rem;
+        margin-bottom: 17px;
+    }
+
+    .news-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #8a8f9c;
+        font-size: .82rem;
+        border-top: 1px solid #eeeae1;
+        padding-top: 14px;
+    }
+
+    .read-link {
+        color: #17233c;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .read-link:hover {
+        color: #b28d49;
+    }
+
+    .category-box {
+        display: block;
+        height: 100%;
+        padding: 25px 20px;
+        background: white;
+        border: 1px solid #e8e3d8;
+        border-radius: 18px;
+        text-decoration: none;
+        text-align: center;
+        transition: .3s;
+    }
+
+    .category-box:hover {
+        transform: translateY(-5px);
+        border-color: #c7a45d;
+        box-shadow: 0 15px 30px rgba(23,35,60,.08);
+    }
+
+    .category-icon {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 14px;
+        border-radius: 16px;
+        background: #17233c;
+        color: #c7a45d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+    }
+
+    .category-box h5 {
+        color: #17233c;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .empty-state {
+        padding: 45px 20px;
+        text-align: center;
+        background: white;
+        border: 1px dashed #d9d2c4;
+        border-radius: 20px;
+        color: #737989;
+    }
+
+    .community-banner {
+        margin: 45px 0 70px;
+        background: #17233c;
+        border-radius: 25px;
+        padding: 45px;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .community-banner h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.4rem;
+        margin-bottom: 12px;
+    }
+
+    .community-banner p {
+        color: #d9deea;
+        max-width: 650px;
+        margin: 0 auto 25px;
+        line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+        .hero-wrap {
+            padding-top: 35px;
+        }
+
+        .hero-card {
+            padding: 38px 25px;
+            border-radius: 22px;
+        }
+
+        .hero-title {
+            font-size: 2.7rem;
+        }
+
+        .section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .community-banner {
+            padding: 35px 20px;
+        }
+    }
+</style>
+
+
+<div class="newsly-home">
+
+    <!-- HERO -->
+    <section class="hero-wrap">
+        <div class="container">
+            <div class="hero-card">
+
+                <div class="eyebrow">
+                    Your daily intelligence
+                </div>
+
+                <h1 class="hero-title">
+                    Stay informed.<br>
+                    Stay connected.
+                </h1>
+
+                <p class="hero-text">
+                    Discover meaningful stories, emerging ideas and the news
+                    that matters to you — all in one refined space.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{% url 'news' %}" class="gold-btn">
+                        Explore News <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                    <a href="{% url 'topics' %}" class="outline-btn">
+                        Explore Topics
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- TRENDING -->
+    <section class="section-space">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">What's happening</div>
+                    <h2>Trending Now</h2>
+                    <p>The stories people are reading right now.</p>
+                </div>
+
+                <a href="{% url 'news' %}" class="section-link">
+                    View all <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+
+            {% if trending_articles %}
+            <div class="row g-4">
+
+                {% for article in trending_articles %}
+                <div class="col-lg-4 col-md-6">
+
+                    <article class="news-card">
+
+                        {% if article.image %}
+                        <img src="{{ article.image.url }}"
+                             class="news-image"
+                             alt="{{ article.title }}">
+                        {% else %}
+                        <div class="news-image-placeholder">
+                            <i class="bi bi-newspaper"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="news-body">
+
+                            <span class="category-pill">
+                                {{ article.category }}
+                            </span>
+
+                            <h3 class="news-title">
+                                <a href="{% url 'article_detail' article.id %}">
+                                    {{ article.title }}
+                                </a>
+                            </h3>
+
+                            <p class="news-description">
+                                {{ article.description|truncatewords:22 }}
+                            </p>
+
+                            <div class="news-meta">
+                                <span>
+                                    <i class="bi bi-eye me-1"></i>
+                                    {{ article.views }} views
+                                </span>
+
+                                <a href="{% url 'article_detail' article.id %}"
+                                   class="read-link">
+                                    Read <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </article>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+                <i class="bi bi-stars fs-2 d-block mb-3"></i>
+                No trending stories yet. Check back soon.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="section-space">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Explore</div>
+                    <h2>Browse by Interest</h2>
+                    <p>Find stories across the topics you care about.</p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'news' %}" class="category-box">
+                        <div class="category-icon">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h5>Technology</h5>
+                    </a>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'news' %}" class="category-box">
+                        <div class="category-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <h5>Business</h5>
+                    </a>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'news' %}" class="category-box">
+                        <div class="category-icon">
+                            <i class="bi bi-trophy"></i>
+                        </div>
+                        <h5>Sports</h5>
+                    </a>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <a href="{% url 'news' %}" class="category-box">
+                        <div class="category-icon">
+                            <i class="bi bi-flask"></i>
+                        </div>
+                        <h5>Science</h5>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- LATEST -->
+    <section class="section-space">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Fresh from the newsroom</div>
+                    <h2>Latest News</h2>
+                    <p>Stay updated with the newest stories.</p>
+                </div>
+
+                <a href="{% url 'news' %}" class="section-link">
+                    See all <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+
+            {% if latest_articles %}
+            <div class="row g-4">
+
+                {% for article in latest_articles %}
+                <div class="col-lg-4 col-md-6">
+
+                    <article class="news-card">
+
+                        {% if article.image %}
+                        <img src="{{ article.image.url }}"
+                             class="news-image"
+                             alt="{{ article.title }}">
+                        {% else %}
+                        <div class="news-image-placeholder">
+                            <i class="bi bi-newspaper"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="news-body">
+
+                            <span class="category-pill">
+                                {{ article.category }}
+                            </span>
+
+                            <h3 class="news-title">
+                                <a href="{% url 'article_detail' article.id %}">
+                                    {{ article.title }}
+                                </a>
+                            </h3>
+
+                            <p class="news-description">
+                                {{ article.description|truncatewords:20 }}
+                            </p>
+
+                            <div class="news-meta">
+                                <span>
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    {{ article.published_at|date:"d M Y" }}
+                                </span>
+
+                                <a href="{% url 'article_detail' article.id %}"
+                                   class="read-link">
+                                    Read <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+                <i class="bi bi-newspaper fs-2 d-block mb-3"></i>
+                No latest articles available yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+    </section>
+
+
+    <!-- RECOMMENDED -->
+    <section class="section-space">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Curated for you</div>
+                    <h2>Recommended For You</h2>
+                    <p>Stories selected from your interests and activity.</p>
+                </div>
+            </div>
+
+
+            {% if recommended_articles %}
+            <div class="row g-4">
+
+                {% for article in recommended_articles %}
+                <div class="col-lg-4 col-md-6">
+
+                    <article class="news-card">
+
+                        {% if article.image %}
+                        <img src="{{ article.image.url }}"
+                             class="news-image"
+                             alt="{{ article.title }}">
+                        {% else %}
+                        <div class="news-image-placeholder">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="news-body">
+
+                            <span class="category-pill">
+                                {{ article.category }}
+                            </span>
+
+                            <h3 class="news-title">
+                                <a href="{% url 'article_detail' article.id %}">
+                                    {{ article.title }}
+                                </a>
+                            </h3>
+
+                            <p class="news-description">
+                                {{ article.description|truncatewords:20 }}
+                            </p>
+
+                            <a href="{% url 'article_detail' article.id %}"
+                               class="read-link">
+                                Read story
+                                <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+                <i class="bi bi-bookmark-star fs-2 d-block mb-3"></i>
+Personalized recommendations will appear here.
+</div>
+{% endif %}
+
+        </div>
+    </section>
+
+
+    <!-- COMMUNITY -->
+    <div class="container">
+        <section class="community-banner">
+
+            <div class="eyebrow">Join the conversation</div>
+
+            <h2>
+                News is better when<br>
+                we talk about it.
+            </h2>
+
+            <p>
+                Share your thoughts, join discussions, participate in polls
+                and connect with the Newsly community.
+            </p>
+
+            <a href="{% url 'community' %}" class="gold-btn">
+                Visit Community
+                <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+
+        </section>
+    </div>
+
+</div>
+
+{% endblock %}
+
